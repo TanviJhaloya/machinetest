@@ -28,6 +28,52 @@ jobs:
       - name: Print output  
         run: ls
       
+      name: Angular Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16 
+      - name: Install Dependencies
+        run: npm install -f
+
+      - name: Build Angular Application
+        run: npm run build --if-present
+
+      - name: Print output  
+        run: ls
+      
+     #  Store the dist folder
+     - uses: actions/upload-artifact@v3
+       with:
+         name: app-build
+         path: dist
+
+  deploy:
+    needs: [build]
+    steps:
+      # Get the dist folder
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: app-build
+      - run: ls dist
+      
       
 
       
