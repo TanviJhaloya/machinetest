@@ -25,8 +25,18 @@ jobs:
       - name: Build Angular Application
         run: npm run build --if-present
 
-      - name: print output
-        run: ls
+
+       #  Store the dist folder
+      - uses: actions/upload-artifact@v3
+        with:
+         name: app-build
+         path: dist
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: app-build
+      - run: ls dist
 
      
       
